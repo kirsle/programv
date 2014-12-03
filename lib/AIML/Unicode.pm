@@ -24,7 +24,7 @@ BEGIN
 {
 	use vars qw ( $VERSION $DEBUG %CONSTANTS );
 
-	$VERSION	= $VERSION	= 0.08;
+	$VERSION	= $VERSION	= 0.09;
 
 	$DEBUG	= 0	unless $DEBUG;
 }
@@ -73,9 +73,9 @@ sub import
 #
 my ( $TO_UPPER, $TO_LOWER, $TO_TITLE, $TO_DIGIT );
 
-$TO_UPPER	= _load_case ( 'unicode/To/Upper.pl' );
-$TO_LOWER	= _load_case ( 'unicode/To/Lower.pl' );
-$TO_TITLE	= _load_case ( 'unicode/To/Title.pl' );
+$TO_UPPER	= _load_case ( 'unicore/To/Upper.pl' );
+$TO_LOWER	= _load_case ( 'unicore/To/Lower.pl' );
+$TO_TITLE	= _load_case ( 'unicore/To/Title.pl' );
 
 #	MEMO: 	unicode/To/Digit.pl
 
@@ -99,7 +99,7 @@ sub _load_case
 {
 	my $pkg = shift;
 
-	my $changer = do ( $pkg )	or die;
+	my $changer = do ( $pkg ) or die;
 
 	my @lines = split /\n/, $changer;
 

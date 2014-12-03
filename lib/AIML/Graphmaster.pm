@@ -54,13 +54,13 @@ BEGIN
 {
 	use vars qw ( $DEBUG $VERSION @ISA );
 
-	$VERSION = $VERSION = 0.08;
+	$VERSION = $VERSION = 0.09;
 
 	$DEBUG = 0	unless $DEBUG;
 }
 
-use AIML::Common 0.08;
-use AIML::Unicode 0.08;
+use AIML::Common 0.09;
+use AIML::Unicode 0.09;
 
 =head1 GLOBALS
 

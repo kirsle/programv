@@ -21,16 +21,16 @@ BEGIN
 {
 	use vars qw ( $DEBUG $VERSION @ISA );
 
-	$VERSION = $VERSION = 0.08;
+	$VERSION = $VERSION = 0.09;
 
 	$DEBUG = 0	unless $DEBUG;
 }
 
 use EnglishSave;
 
-use AIML::Common 0.08;
-use AIML::Config 0.08;
-use AIML::Knowledge 0.08;
+use AIML::Common 0.09;
+use AIML::Config 0.09;
+use AIML::Knowledge 0.09;
 
 =head1 GLOBALS
 

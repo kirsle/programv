@@ -39,7 +39,7 @@ BEGIN
 use strict;
 use warnings;
 
-use AIML::Shell 0.08;
+use AIML::Shell 0.09;
 
 my $shell = new AIML::Shell ( config_file => $::CONFIG_FILE );
 

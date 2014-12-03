@@ -1,5 +1,8 @@
 Revision history for Perl extension AIML.
 
+0.09  Tue Dec  2 2014
+	- Dusted off the old codebase to make it work under Perl 5.18
+
 0.08  Wed Jul 10 2002
 	- Documentation started
 	- AIML::Common string functions simplified

@@ -52,7 +52,7 @@ BEGIN
 {
 	use vars qw ( $DEBUG $VERSION @ISA );
 
-	$VERSION = $VERSION = 0.08;
+	$VERSION = $VERSION = 0.09;
 
 	$DEBUG = 0	unless $DEBUG;
 }
@@ -61,12 +61,12 @@ use Time::HiRes qw ( gettimeofday tv_interval );
 
 use EnglishSave;
 
-use AIML::Common 0.08;
+use AIML::Common 0.09;
 
-use AIML::Memory 0.08;
-use AIML::Listener 0.08;
-use AIML::Talker 0.08;
-use AIML::Responder 0.08;
+use AIML::Memory 0.09;
+use AIML::Listener 0.09;
+use AIML::Talker 0.09;
+use AIML::Responder 0.09;
 
 =head1 GLOBALS
 

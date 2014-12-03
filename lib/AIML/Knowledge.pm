@@ -52,7 +52,7 @@ BEGIN
 {
 	use vars qw ( $DEBUG $VERSION @ISA );
 
-	$VERSION = $VERSION = 0.08;
+	$VERSION = $VERSION = 0.09;
 
 	$DEBUG = 0	unless $DEBUG;
 }
@@ -63,7 +63,7 @@ BEGIN
 use EnglishSave;
 use Readonly 0.07;
 
-use AIML::Common 0.08;
+use AIML::Common 0.09;
 
 =head1 GLOBALS
 

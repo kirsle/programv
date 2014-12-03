@@ -1,8 +1,23 @@
-ProgramV version 0.08
-=====================
+# ProgramV version 0.09
 
-DESCRIPTION
------------
+## PREAMBLE
+
+Program V was originally written by Ernest Lergon and seemingly abandoned in the
+year 2002 at version 0.08; it was designed for Perl 5.6 and hasn't been able to
+run, without modification, on any newer versions of Perl since then.
+
+It has been dusted off and fixed up by Noah Petherbridge in 2014 so that it
+should run without modification on modern Perl (tested on Perl 5.18). See the
+file `UpdateNotes.md` for an overview of what changes were necessary to the
+codebase for this to work. If you're viewing this on GitHub, check the commit
+history to see what all was changed to get version 0.08 to run on Perl 5.18.
+
+Besides that, just as before, Program V is not being actively maintained by
+anybody. If my work in getting this to run on Perl 5.18 has inspired you, feel
+free to fork this project and continue development, as it was released by
+Ernest Lergon under the same terms as Perl itself.
+
+## DESCRIPTION
 
 ProgramV is a Perl implementation of an interpreter for the Artificial
 Intelligence Markup Language (AIML) defined by the Alicebot and AIML
@@ -21,25 +36,27 @@ cookie-handling, encryption, logging etc. - so ProgramV can be limited
 to the core functions of AIML: parsing, matching and responding.
 
 FEATURES
-	Smooth integration in Apache environment
-	Validating AIML parser (picky 1.01 ;-)
-	Very fast startup due to precompiled knowledge
-	Only a few modules / objects
-	Integration of Perl code in AIML
-	Full logging of matching and parsing if desired
-	Runs on Linux as well as on Windows
-	Edit and test your bot local on Windows and run it on your Linux server
-	because all files are interchangeable
+
+* Smooth integration in Apache environment
+* Validating AIML parser (picky 1.01 ;-)
+* Very fast startup due to precompiled knowledge
+* Only a few modules / objects
+* Integration of Perl code in AIML
+* Full logging of matching and parsing if desired
+* Runs on Linux as well as on Windows
+* Edit and test your bot local on Windows and run it on your Linux server
+* because all files are interchangeable
 
 CAVEATS
-	No filelocking on Windows
-	Only one local user for the shell (console)
-	No realtime learning due to precompiled knowledge
-	You must have root access to install and run
-	No server side javascript yet
-	No server side system commands yet
-	No targeting yet
-	Proprietary data format of user/log files (still...)
+
+* No filelocking on Windows
+* Only one local user for the shell (console)
+* No realtime learning due to precompiled knowledge
+* You must have root access to install and run
+* No server side javascript yet
+* No server side system commands yet
+* No targeting yet
+* Proprietary data format of user/log files (still...)
 
 This package ships with a modified Alice AIML set and an excerpt of
 the Standard AIML set for testing.
@@ -51,8 +68,7 @@ http://alice.virtualitas.net/talk
 For server installation please see README.server
 
 
-DEVELOPMENT STATE
------------------
+## DEVELOPMENT STATE
 
 Officially "alpha", hence the 0.0x version number, though ProgramV
 should run as expected. But don't rely on anything ;-)
@@ -70,14 +86,12 @@ The included module EnglishSave.pm is a workaround. For more
 information see http://www.virtualitas.net/perl/englishsave/.
 
 
-BUGS
-----
+## BUGS
 
 Sure. Many.
 
 
-INSTALLATION
-------------
+## INSTALLATION
 
 Make sure you have Perl 5.6+ installed or the unicode support won't
 work. Perl is available at http://www.perl.com .
@@ -146,8 +160,7 @@ See below for further information, how to set up your own bot.
 For server installation please see README.server
 
 
-SCRIPT build.pl [-d] [-f filename]
-----------------------------------
+## SCRIPT build.pl [-d] [-f filename]
 
 The -d switch turns on debugging and extensive logging (slow).
 
@@ -170,15 +183,14 @@ To set up a new bot "mybot" do:
 
 5. Edit conf/startup-mybot.xml so that it reads:
 
-	<learn>../aiml/mybot/*.aiml</learn>
+	`<learn>../aiml/mybot/*.aiml</learn>`
 
 6. Run ./build.pl -f server-mybot.properties
 
 7. Enjoy ./shell.pl -f server-mybot.properties
 
 
-SCRIPT stats.pl [-f filename]
------------------------------
+## SCRIPT stats.pl [-f filename]
 
 This script gives statitistics about your knowledge data.
 
@@ -189,8 +201,7 @@ Default: -f server.properties
 It is called automatically after build.pl is successfull.
 
 
-SCRIPT shell.pl [-d] [-f filename]
-----------------------------------
+## SCRIPT shell.pl [-d] [-f filename]
 
 The -d switch turns on debugging and extensive logging (slow).
 
@@ -199,8 +210,7 @@ With the -f switch you can provide another config file (see above).
 Default: -f server.properties
 
 
-SCRIPT tester.sh
-----------------
+## SCRIPT tester.sh
 
 This script deletes ./aiml.log, ./testcase.log and ./data/user1.data
 and runs
@@ -208,8 +218,7 @@ and runs
 	./shell.pl -d -f server-test.properties < testcase.txt > testcase.log
 
 
-COPYRIGHT AND LICENSE
----------------------
+## COPYRIGHT AND LICENSE
 
 Ernest Lergon, ernest@virtualitas.net
 
@@ -221,4 +230,3 @@ redistribute it and/or modify it under the same terms as Perl itself.
 If you have suggestions for improvement, please drop me a line. If you
 make improvements to this software, I ask that you please send me a
 copy of your changes. Thanks.
-

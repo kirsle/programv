@@ -29,9 +29,9 @@ use warnings;
 use Time::HiRes qw ( gettimeofday tv_interval );
 use EnglishSave;
 
-use AIML::Common 0.08;
-use AIML::Config 0.08;
-use AIML::Loader 0.08;
+use AIML::Common 0.09;
+use AIML::Config 0.09;
+use AIML::Loader 0.09;
 
 print "\nAIML Builder version $AIML::Loader::VERSION\n";
 print "Reading config from $::CONFIG_FILE...\n";

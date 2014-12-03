@@ -93,7 +93,7 @@ BEGIN
 {
 	use vars qw ( $DEBUG $VERSION @ISA );
 
-	$VERSION = $VERSION = 0.08;
+	$VERSION = $VERSION = 0.09;
 
 	$DEBUG = 0	unless $DEBUG;
 }

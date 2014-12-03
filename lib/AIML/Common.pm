@@ -29,7 +29,7 @@ BEGIN
 
 	use vars qw ( $VERSION $DEBUG );
 
-	$VERSION	= $VERSION	= 0.08;
+	$VERSION	= $VERSION	= 0.09;
 
 	$DEBUG	= 0	unless $DEBUG;
 
@@ -43,7 +43,8 @@ BEGIN
 	};
 	my $err1 = $@ || '';
 
-	my $err2 = not exists &flock;
+	# Modern Perl has this.....
+	my $err2 = undef; #not exists &flock;
 
 	if ( $err1 or $err2 )
 	{
