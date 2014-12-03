@@ -1,0 +1,153 @@
+my name is client
+testatomic
+testdisplayset
+testhide
+testget
+testsetx
+testalter
+testsettopic
+test6a
+test6b
+testsimplecondition
+testsimpleconditiona
+testsimpleconditionmatch
+testconditionlist
+testconditionlistmatch
+testconditionlistdefault
+testconditionlistname
+testconditionlistnamematch
+teststar Test passed
+teststar Test passed one and Test passed two and Test passed three and Test passed four
+testunderscore Test passed one and Test passed two and Test passed three and Test passed four
+testrandom
+testrandom
+testrandom
+testrandom
+testrandom
+testrandom
+testwordformat
+testnestedwordformat
+testsimplemultisentencethat
+testthat
+testarray4multisentencethat
+testarray3multisentencethat
+testarray2multisentencethat
+testarray1multisentencethat
+testthatarray
+testbotproperties
+testconditionsetvalue
+testjavascript
+testsystem
+testnestedcondition
+testnestedcondition1
+testnestedcondition2
+testsetcondition
+testversion
+testsrai
+testsr sraisucceeded
+testnestedsrai
+testthinksrai
+teststarset Test passed
+testidsizedate
+testgossip
+testname
+testinput
+testinput1
+testinput2
+testinput3
+testgender he said
+testgender she was
+testgender give to him
+testgender or for him
+testgender together with him
+testgender something on him
+testgender in him is light
+testgender send to her
+testgender gift for her
+testgender someone with her
+testgender curse on her
+testgender monster in her
+testgender his wishes
+testgender her demands
+testgender of him
+testthatstar
+testthatstar1
+testmultithatstar
+testmultithatstar1
+testtopicstar
+test34
+testmultitopicstar
+test35
+testoldtopic
+test36
+testextremesrai
+testperson i was there
+testperson he was away
+testperson she was kind
+testperson i am sleepy
+testperson i will
+testperson for me
+testperson my bot
+testperson beside myself
+testperson is mine
+testperson2 along with you
+testperson2 something is with me
+testperson2 send to you
+testperson2 present to me
+testperson2 picture of you
+testperson2 reminder of me
+testperson2 best wishes for you
+testperson2 for me this is
+testperson2 give you something
+testperson2 give me that
+testperson2 giving you a hand
+testperson2 giving me a lift
+testperson2 gave you a fork
+testperson2 gave me an idea
+testperson2 make you happy
+testperson2 make me sad
+testperson2 made you aware
+testperson2 made me cognizant
+testcasereturnnamewhenset
+testperl
+testperl2
+testperl 7 + 4
+testperl 4 - 6
+testperl 2 * 9
+testperl 6 / 3
+testperl 2 / 4
+testperl 1 / 3
+testperl 3.3333 / 1.1111
+testperl 7 = 7
+testperl 7 = 8
+testperlthink 22 + 44
+testperlbad1
+testperlbad2
+testperlfree 7 + 4
+testperlfree 4 - 6
+testperlfree 2 * 9
+testperlfree 6 / 3
+testperlfree 2 / 4
+testperlfree 7 = 7
+testperlfree 7 = 8
+testperlfree 1 / 0
+testperlfree 0.9999 / 0.0001
+testperlfree 5 / 0.3
+testperlfree 0.8888 / 2
+testperlfree 0.0000001 = 0.0000001
+testperlfree 0.0000001 = 0.00000011
+testperlfree 2 power 2
+testperlfree this is wrong
+z1 z2 z3 z4 z5 z6 z7 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23
+z1 z2 z3 z4 z5 z6 z7 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24
+z1 z2 z3 z4 z5 z6 z7 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25
+z1 z2 z3 z4 z5 z6 z7 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24
+z1 z2 z3 z4 z5 z6 z7 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25
+z1 z2 z3 z4 z5 z6 z7 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33
+z1 z2 z3 z4 z5 z6 z7 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z35 z36 z37 z38 z39 z40 z41 z42 z43 z44 z45 z46 z47 z48 z49 z50
+z1 z2 z3 z4 z5 z6 z7 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z35 z36 z37 z38 z39 z40 z41 z42 z43 z44 z45 z46 z47 z48 z49 z50 z51 z52 z53 z54 z55 z56 z57 z58 z59 z60 z61 z62 z63 z64 z65 z66
+testcaseinfiniteloop
+testcaseinfiniteloop2
+testcaseinfiniteloop3
+testcasemultipleadjacentsrais
+/exit

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<aiml version="1.01"
+	xmlns="http://alicebot.org/2001/AIML"
+	xmlns:aiml="http://alicebot.org/2001/AIML"
+	xmlns:html="http://www.w3.org/TR/REC-html40">
+
+<!-- This program is open source code released under -->
+<!-- the terms of the GNU General Public License -->
+<!-- as published by the Free Software Foundation. -->
+
+<html:meta name="author" content="Kim Sullivan"/>
+<html:meta name="language" content="en"/>
+
+<topic name="FUNCTION Q2">
+
+<category>
+<pattern>RESPONSE SAYQUESTION</pattern>
+<template>
+Who is the president of the U.S.A?<html:br/>
+A: Bill Clinton <html:br/>
+B: George Bush <html:br/>
+C: Richard Nixon <html:br/>
+<srai>LOOP</srai>
+</template>
+</category>
+
+<category>
+<pattern>RESPONSE A</pattern>
+<template>
+Wrong, the right answer was B.<html:br/>
+<srai>NEXT QUESTION</srai>
+</template>
+</category>
+
+<category>
+<pattern>RESPONSE B</pattern>
+<template>
+That was easy, wasn't it?<html:br/>
+<srai>NEXT QUESTION</srai>
+</template>
+</category>
+
+<category>
+<pattern>RESPONSE C</pattern>
+<template>
+Nope, it's Bill Clinton.<html:br/>
+<srai>NEXT QUESTION</srai>
+</template>
+</category>
+
+
+<category>
+<pattern>RESPONSE *</pattern>
+<template>
+Please respond only A, B or C. <html:br/>
+<srai>SAYQUESTION</srai>
+</template>
+</category>
+</topic>
+</aiml>

@@ -1,0 +1,38 @@
+Revision history for Perl extension AIML.
+
+0.08  Wed Jul 10 2002
+	- Documentation started
+	- AIML::Common string functions simplified
+	- usage of string functions checked and trimmed in all modules
+	- AIML::Common changed - no locking on Windows!
+	- AIML::Common::_log added
+	- AIML::Common::logging added
+	- AIML::Common::patternFitIgnoreCase renamed to patternFitNoWildcards
+	- AIML::Config using inactive options gives a fatal error now
+	-- allowed and used config entries as of version 0.08:
+	   programv.startup=conf/startup.xml
+	   programv.runfile=data/knowledge.data
+	   programv.merge=true
+	   programv.response-timeout=5000
+	   programv.infinite-loop-input=INFINITE LOOP
+	   programv.timeout-input=RESPONSE TIMEOUT
+	   programv.connect-string=CONNECT
+	   -- programv.emptydefault is NOT allowed!
+	- AIML::File::fileExists -e changed to -f
+	- AIML::File::pathExists added
+	- AIML::Handler::getTemplate changed - uses external template now
+	- AIML::Handler::readTemplate added - hardcoded yet!
+	- AIML::Graphmaster::match empty path without leading blank - BUGFIX
+	- AIML::Memory::get* return '' now  - BUGFIX
+	- AIML::Responder::getInternalResponse handling of <think> - BUGFIX
+	- AIML::Responder::startTag regex for <condition> value attribute - BUGFIX
+	- AIML::Responder::endTag regex for <li> value attribute - BUGFIX
+	- AIML::Talker::as_is, as_text, as_html, as_voice added - EXPERIMENTAL
+	- AIML::Listener::as_string, as_is, as_text, as_html, as_voice added - EXPERIMENTAL
+	- AIML::File handling of CR/LF - all plain opens replaced with AIML::File::open
+	- AIML::Shell runs now on Windows
+	-- *.aiml, *.xml, knowledge.data, server.properties, testcase.txt etc.
+	   are exchangable now regardless of their file format (CRLF vs. LF).
+
+0.07  Wed Jun 17 2002
+	- first public alpha release

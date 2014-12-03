@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<aiml version="1.01"
+	xmlns="http://alicebot.org/2001/AIML"
+	xmlns:aiml="http://alicebot.org/2001/AIML"
+	xmlns:html="http://www.w3.org/TR/REC-html40">
+
+<!-- This program is open source code released under -->
+<!-- the terms of the GNU General Public License -->
+<!-- as published by the Free Software Foundation. -->
+
+<html:meta name="author" content="Kim Sullivan"/>
+<html:meta name="language" content="en"/>
+
+<category>
+<pattern>CLOZE INIT</pattern>
+<template>
+<think>
+<set name="QUESTIONS"><srai>MULTI SHUFFLE Q1 Q2 Q3 Q4</srai> QEND</set>
+</think>
+<srai>FIRST QUESTION</srai>
+</template>
+</category>
+
+<category>
+<pattern>FIRST QUESTION</pattern>
+<template>
+<srai>FUNCTION <srai>STACK QUESTIONS POP</srai></srai>
+<srai>SAYQUESTION</srai>
+</template>
+</category>
+
+
+<topic name="FUNCTION *">
+
+<category>
+<pattern>NEXT QUESTION</pattern>
+<template>
+<srai>END FUNCTION</srai>
+<srai>FUNCTION <srai>STACK QUESTIONS POP</srai></srai>
+<srai>SAYQUESTION</srai>
+</template>
+</category>
+
+</topic>
+
+<topic name="FUNCTION QEND">
+
+<category>
+<pattern>RESPONSE SAYQUESTION</pattern>
+<template>
+This was the last question of the test.
+<srai>END FUNCTION</srai>
+</template>
+</category>
+
+</topic>
+
+</aiml>

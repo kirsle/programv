@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<aiml version="1.01"
+	xmlns="http://alicebot.org/2001/AIML"
+	xmlns:aiml="http://alicebot.org/2001/AIML"
+	xmlns:html="http://www.w3.org/TR/REC-html40">
+
+<!-- This program is open source code released under -->
+<!-- the terms of the GNU General Public License -->
+<!-- as published by the Free Software Foundation. -->
+
+<html:meta name="author" content="Kim Sullivan"/>
+<html:meta name="language" content="en"/>
+
+
+<category>
+<pattern>MULTI SHUFFLE *</pattern>
+<template>
+<srai>SHUFFLE <srai>SHUFFLE <srai>SHUFFLE <srai>SHUFFLE <star index="1"/></srai></srai></srai></srai>
+</template>
+</category>
+
+
+<category>
+<pattern>SHUFFLE * *</pattern>
+<template>
+<random>
+<li><star index="1"/> <srai>SHUFFLE <star index="2"/></srai></li>
+<li><star index="2"/> <srai>SHUFFLE <star index="1"/></srai></li>
+</random>
+</template>
+</category>
+
+<category>
+<pattern>SHUFFLE *</pattern>
+<template>
+<star/>
+</template>
+</category>
+
+</aiml>

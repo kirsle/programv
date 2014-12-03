@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<aiml version="1.01"
+	xmlns="http://alicebot.org/2001/AIML"
+	xmlns:aiml="http://alicebot.org/2001/AIML"
+	xmlns:html="http://www.w3.org/TR/REC-html40">
+
+<html:meta name="description" content="Special patterns for internal use."/>
+<html:meta name="author" content="Ernest Lergon"/>
+<html:meta name="copyright" content="VIRTUALITAS Inc."/>
+<html:meta name="date" content="2002-06-15"/>
+<html:meta name="language" content="en"/>
+
+<!--
+	Free software © 2002 VIRTUALITAS Inc. http://virtualitas.net
+
+	This program is open source code released under
+	the terms of the GNU General Public License
+	as published by the Free Software Foundation.
+
+	Complies with AIML 1.01 Tag Set Specification http://alicebot.org
+	Artificial Intelligence Markup Language © 2001 A.L.I.C.E. A.I. Foundation.
+-->
+
+<!-- must be defined at server.properties.programv.timeout-input -->
+
+<category>
+	<pattern>RESPONSE TIMEOUT</pattern>
+	<template>Sorry, I thought a long time about '<input index="1"/>', but couldn't find an answer.</template>
+</category>
+
+<!-- must be defined at server.properties.programv.infinite-loop-input -->
+
+<category>
+	<pattern>INFINITE LOOP</pattern>
+	<template>Sorry, '<input index="2"/>' pushed me in a doom loop.</template>
+</category>
+
+<!-- must be defined at server.properties.programv.connect-string -->
+<!-- programv-startup.bots.bot.properties.property.id must be defined in startup.xml -->
+
+<category>
+	<pattern>CONNECT</pattern>
+	<template>
+		Hi, pleased to meet you
+		<think>
+			<set name="hasname"><perl>hasValueSet ( 'name', '<get name="name"/>', '<bot name="id"/>' )</perl></set>
+			<set name="hasit"><perl>hasValueSet ( 'it', '<get name="it"/>', '<bot name="id"/>' )</perl></set>
+		</think>
+		<condition name="hasname">
+			<li value="1">
+				again, <get name="name"/>.
+				<condition name="hasit">
+					<li value="1">We were talking about <get name="it"/>.</li>
+					<li><sr/></li>
+				</condition>
+			</li>
+			<li>. My name is <bot name="name"/>. <sr/></li>
+		</condition>
+		<think>
+			<set name="hasname"></set>
+			<set name="hasit"></set>
+		</think>
+	</template>
+</category>
+
+<perl>
+sub hasValueSet
+{
+	my $name		= shift() || '';
+	my $value	= shift() || '';
+	my $bot_id	= shift() || '';
+
+	return 0		unless $name;
+	return 0		unless $value;
+#	return 0		if $value eq AIML::Config::getConfig ( 'emptydefault' );
+
+	my $predicates	= AIML::Knowledge::getPredicates ( $bot_id );
+
+	if ( exists $predicates->{$name} )
+	{
+		my $default		= $predicates->{$name}->{default};
+
+		return 0		if $default and ( $value eq $default );
+	}
+
+	return 1;
+}
+</perl>
+
+</aiml>

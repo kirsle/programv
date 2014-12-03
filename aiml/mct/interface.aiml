@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<aiml version="1.01"
+	xmlns="http://alicebot.org/2001/AIML"
+	xmlns:aiml="http://alicebot.org/2001/AIML"
+	xmlns:html="http://www.w3.org/TR/REC-html40">
+
+<!-- This program is open source code released under -->
+<!-- the terms of the GNU General Public License -->
+<!-- as published by the Free Software Foundation. -->
+
+<html:meta name="author" content="Dirk Scheuring"/>
+<html:meta name="author" content="Kim Sullivan"/>
+<html:meta name="language" content="en"/>
+
+
+<!-- set up a function call -->
+<category>
+<pattern>FUNCTION *</pattern>
+<template>
+<think>
+<set name="oldtopic"><get name="topic"/></set>
+<set name="topic">INTERFACE</set>
+<set name="function"><star/></set>
+</think>
+</template>
+</category>
+
+<!-- the main 'event handler' -->
+<topic name="INTERFACE">
+
+  <category>
+  <pattern>_</pattern>
+  <template>
+  <think>
+  <set name="topic">FUNCTION <get name="function"/></set>
+  </think>
+  <srai>RESPONSE <star/></srai>
+  </template>
+  </category>
+
+</topic>
+
+<!-- miscellaneous routines -->
+<topic name="FUNCTION *">
+
+  <!-- End a function call -->
+  <category>
+  <pattern>END FUNCTION</pattern>
+  <template>
+  <think>
+  <set name="topic"><get name="oldtopic"/></set>
+  <set name="function"></set>
+  <set name="oldtopic"></set>
+  </think>
+  </template>
+  </category>
+
+  <!-- A good bot should reprompt if the response was unknown -->
+  <category>
+  <pattern>RESPONSE *</pattern>
+  <template>
+  AIML Exception on function <get name="function"/>: unhandled response "<star/>".
+  <srai>END FUNCTION</srai>
+  </template>
+  </category>
+
+  <!-- If for some weird reason the interface was exited, return to it ASAP -->
+  <category>
+  <pattern>*</pattern>
+  <template>
+  <think><set name="topic">INTERFACE</set></think>
+  </template>
+  </category>
+
+  <!-- After an unknown response/repromt -->
+  <category>
+  <pattern>LOOP</pattern>
+  <template>
+  <think><set name="topic">INTERFACE</set></think>
+  </template>
+  </category>
+
+</topic>
+
+</aiml>

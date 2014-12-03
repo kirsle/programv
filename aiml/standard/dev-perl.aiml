@@ -1,0 +1,864 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<aiml version="1.01"
+	xmlns="http://alicebot.org/2001/AIML"
+	xmlns:aiml="http://alicebot.org/2001/AIML"
+	xmlns:html="http://www.w3.org/TR/REC-html40">
+
+<html:meta name="description" content="Test patterns for Perl."/>
+<html:meta name="author" content="Ernest Lergon"/>
+<html:meta name="copyright" content="VIRTUALITAS Inc."/>
+<html:meta name="date" content="2002-05-31"/>
+<html:meta name="language" content="en"/>
+
+<!--
+	Free software © 2002 VIRTUALITAS Inc.
+	This program is open source code released under
+	the terms of the GNU General Public License
+	as published by the Free Software Foundation.
+-->
+
+<!-- ############################# global perl functions ############################### -->
+
+<perl>
+<![CDATA[
+#
+#	define your gobal functions here
+#
+#	always protect this code with CDATA, especially if you use &, < or > !
+#
+use strict;
+use warnings;
+
+my %ops	= ( plus => '+', minus => '-', times => '*', divide => '/', equals => '==' );
+
+sub isNumber
+{
+	my $x = shift;
+
+	return 0		unless defined $x;
+	return 0		unless $x =~ /^([+-]?)(?=\d|\.\d)\d*(\.\d*)?([Ee]([+-]?\d+))?$/;
+	return 1;
+}
+
+sub toNumber
+{
+	my $x = shift;
+
+	return $x	unless defined $x;
+	return $x	if isNumber ( $x );			#	ok
+
+	if ( $x =~ /^(\d+) point (\d+)$/ )		#	spoken math...
+	{
+		return $1 . '.' . $2;		#	float
+	}
+	else
+	{
+		return $x;						#	can't handle it...
+	}
+}
+
+sub isOperator
+{
+	my $x = shift;
+
+	return 0		unless defined $x;
+
+	$x = lc ( $x );
+
+	return $ops{$x} ? 1 : 0;
+}
+
+sub toOperator
+{
+	my $x = shift;
+
+	return 'undef'		unless defined $x;
+
+	$x = lc ( $x );
+
+	return $ops{$x} ? $ops{$x} : $x;
+}
+
+sub calc
+{
+#	my $func	= (caller(1))[3];
+#	print "$func ( @_ )\n";
+
+	my $a		= shift() || 0;
+	my $op	= shift() || 'undef';
+	my $b		= shift() || 0;
+
+	return "Don't know how to do '$a $op $b'."	unless isOperator ( $op );
+
+	$a = toNumber ( $a );
+	$b = toNumber ( $b );
+
+	return 'NaN'	unless isNumber ( $a );
+	return 'NaN'	unless isNumber ( $b );
+
+	$op = lc ( $op );
+
+	SWITCH:
+	{
+		for ( $op )
+		{
+			/^plus$/		&& do {
+									return $a + $b;
+								};
+			/^minus$/	&& do {
+									return $a - $b;
+								};
+			/^times$/	&& do {
+									return $a * $b;
+								};
+			/^divide$/	&& do {
+									return 'Infinity'	if $b == 0;
+									return $a / $b;
+								};
+			/^equals$/	&& do {
+									return $a == $b ? 'true' : 'false';
+								};
+			die;
+		}
+	}
+}
+
+
+sub calcAdd
+{
+	my $a = shift;
+	my $b = shift;
+
+	return calc ( $a, 'PLUS', $b );
+}
+
+sub calcSubtract
+{
+	my $a = shift;
+	my $b = shift;
+
+	return calc ( $a, 'MINUS', $b );
+}
+
+sub calcTimes
+{
+	my $a = shift;
+	my $b = shift;
+
+	return calc ( $a, 'TIMES', $b );
+}
+
+sub calcDivide
+{
+	my $a = shift;
+	my $b = shift;
+
+	return calc ( $a, 'DIVIDE', $b );
+}
+
+sub isEqual
+{
+	my $a = shift;
+	my $b = shift;
+
+	return calc ( $a, 'EQUALS', $b );
+}
+
+1;
+]]>
+</perl>
+
+<!-- Test case PERL #01a.
+
+This testcase tests the bot's ability to add integers.
+
+TESTER) testperl
+BOT)    Test case PERL #01a.
+        The result of 3 + 5 is 8.
+        Test passed if result == 8 (constants).
+-->
+
+<category>
+<pattern>TESTPERL</pattern>
+<template>
+Test case PERL #01a.
+<html:br/>
+The result of 3 + 5 is <perl>calcAdd ( 3, 5 );</perl>.
+<html:br/>
+Test passed if result == 8 (constants).
+</template>
+</category>
+
+<!-- Test case PERL #01b.
+
+This testcase tests the bot's ability to add floats.
+
+TESTER) testperl
+BOT)    Test case PERL #01b.
+        The result of 3.3 + 5.1 is 8.4.
+        Test passed if result == 8.4 (constants).
+-->
+
+<category>
+<pattern>TESTPERL2</pattern>
+<template>
+Test case PERL #01b.
+<html:br/>
+The result of 3.3 + 5.1 is <perl>calcAdd ( 3.3, 5.1 );</perl>.
+<html:br/>
+Test passed if result == 8.4 (constants).
+</template>
+</category>
+
+<!-- Test case PERL #02a.
+
+This testcase tests the bot's ability to add star values.
+
+TESTER) testperl 7 + 4
+BOT)    Test case PERL #02a.
+        Internal: 7 PLUS 4
+        Result: 7 + 4 = 11
+        Test passed if result != NaN and equation is correct (from stars).
+-->
+
+<category>
+<pattern>TESTPERL * PLUS *</pattern>
+<template>
+Test case PERL #02a.
+<html:br/>
+Internal: <star/> PLUS <star index="2"/>
+<html:br/>
+Result: <perl>toNumber ( '<star/>' )</perl> + <perl>toNumber ( '<star index="2"/>' )</perl> = <perl>calcAdd ( '<star/>', '<star index="2"/>' );</perl>
+<html:br/>
+Test passed if result != NaN and equation is correct (from stars).
+</template>
+</category>
+
+<!-- Test case PERL #02b.
+
+This testcase tests the bot's ability to subtract star values.
+
+TESTER) testperl 4 - 6
+BOT)    Test case PERL #02b.
+        Internal: 4 MINUS 6
+        Result: 4 - 6 = -2
+        Test passed if result != NaN and equation is correct (from stars).
+-->
+
+<category>
+<pattern>TESTPERL * MINUS *</pattern>
+<template>
+Test case PERL #02b.
+<html:br/>
+Internal: <star/> MINUS <star index="2"/>
+<html:br/>
+Result: <perl>toNumber ( '<star/>' )</perl> - <perl>toNumber ( '<star index="2"/>' )</perl> = <perl>calcSubtract ( '<star/>', '<star index="2"/>' );</perl>
+<html:br/>
+Test passed if result != NaN and equation is correct (from stars).
+</template>
+</category>
+
+
+
+<!-- Test case PERL #02c.
+
+This testcase tests the bot's ability to multiply star values.
+
+TESTER) testperl 2 * 9
+BOT)    Test case PERL #02c.
+        Internal: 2 TIMES 9
+        Result: 2 * 9 = 18
+        Test passed if result != NaN and equation is correct (from stars).
+-->
+
+
+<category>
+<pattern>TESTPERL * TIMES *</pattern>
+<template>
+Test case PERL #02c.
+<html:br/>
+Internal: <star/> TIMES <star index="2"/>
+<html:br/>
+Result: <perl>toNumber ( '<star/>' )</perl> * <perl>toNumber ( '<star index="2"/>' )</perl> = <perl>calcTimes ( '<star/>', '<star index="2"/>' );</perl>
+<html:br/>
+Test passed if result != NaN and equation is correct (from stars).
+</template>
+</category>
+
+<!-- Test case PERL #02d.
+
+This testcase tests the bot's ability to divide star values.
+
+TESTER) testperl 6 / 3
+BOT)    Test case PERL #02d.
+        Internal: 6 DIVIDE 3
+        Result: 6 / 3 = 2
+        Test passed if result != NaN and equation is correct (from stars).
+
+TESTER) testperl 2 / 4
+BOT)    Test case PERL #02d.
+        Internal: 2 DIVIDE 4
+        Result: 2 / 4 = 0.5
+        Test passed if result != NaN and equation is correct (from stars).
+
+TESTER) testperl 1 / 3
+BOT)    Test case PERL #02d.
+        Internal: 1 DIVIDE 3
+        Result: 1 / 3 = 0.333333333333333
+        Test passed if result != NaN and equation is correct (from stars).
+
+TESTER) testperl 3.3333 / 1.1111
+BOT)    Test case PERL #02d.
+        Internal: 3 point 3333 DIVIDE 1 point 1111
+        Result: 3.3333 / 1.1111 = 3
+        Test passed if result != NaN and equation is correct (from stars).
+-->
+
+<!-- think about this... see substitutions.xml... -->
+
+<category>
+<pattern>_ DIVIDED BY _</pattern>
+<template>
+<!--
+stars at DIVIDED BY:
+<html:br/>
+1. <star index="1"/><html:br/>
+2. <star index="2"/><html:br/>
+-->
+<srai><star/> divide <star index="2"/></srai>
+</template>
+</category>
+
+<category>
+<pattern>TESTPERL * DIVIDE *</pattern>
+<template>
+Test case PERL #02d.
+<html:br/>
+Internal: <star/> DIVIDE <star index="2"/>
+<html:br/>
+Result: <perl>toNumber ( '<star/>' )</perl> / <perl>toNumber ( '<star index="2"/>' )</perl> = <perl>calcDivide ( '<star/>', '<star index="2"/>' );</perl>
+<html:br/>
+Test passed if result != NaN and equation is correct (from stars).
+</template>
+</category>
+
+<!-- Test case PERL #02e.
+
+This testcase tests the bot's ability to compare two star values numerically.
+
+TESTER) testperl 7 = 7
+BOT)    Test case PERL #02e.
+        Internal: 7 EQUALS 7
+        Result: 7 == 7 = true
+        Test passed if result != NaN and equation is correct (from stars).
+
+TESTER) testperl 7 = 8
+BOT)    Test case PERL #02e.
+        Internal: 7 EQUALS 8
+        Result: 7 == 8 = false
+        Test passed if result != NaN and equation is correct (from stars).
+-->
+
+<category>
+<pattern>TESTPERL * EQUALS *</pattern>
+<template>
+Test case PERL #02e.
+<html:br/>
+Internal: <star/> EQUALS <star index="2"/>
+<html:br/>
+Result: <perl>toNumber ( '<star/>' )</perl> == <perl>toNumber ( '<star index="2"/>' )</perl> = <perl>isEqual ( '<star/>', '<star index="2"/>' );</perl>
+<html:br/>
+Test passed if result != NaN and equation is correct (from stars).
+</template>
+</category>
+
+<!-- Test case PERL #03.
+
+This testcase tests the bot's ability to add star values by mental arithmetic.
+
+TESTER) testperlthink 22 + 44
+BOT)    Test case PERL #03.
+        Internal: 22 PLUS 44
+        Result: 22 + 44 = 66
+        Test passed if result != NaN and equation is correct (from stars with think).
+-->
+
+<category>
+<pattern>TESTPERLTHINK * PLUS *</pattern>
+<template>
+Test case PERL #03.
+<think><set name="testperl"><perl>calcAdd ( '<star/>', '<star index="2"/>' );</perl></set></think>
+<html:br/>
+Internal: <star/> PLUS <star index="2"/>
+<html:br/>
+Result: <perl>toNumber ( '<star/>' )</perl> + <perl>toNumber ( '<star index="2"/>' )</perl> = <get name="testperl"/>
+<html:br/>
+Test passed if result != NaN and equation is correct (from stars with think).
+<think><set name="testperl"></set></think>
+</template>
+</category>
+
+<!-- Test case PERL #04a.
+
+This testcase tests the bot's ability to react on bad numbers.
+
+TESTER) testperlbad1
+BOT)    Test case PERL #04a.
+        The result of 3 + five is NaN.
+        Test passed if result == NaN (constants).
+-->
+
+<category>
+<pattern>TESTPERLBAD1</pattern>
+<template>
+Test case PERL #04a.
+<html:br/>
+The result of 3 + five is <perl>calcAdd ( 3, 'five' );</perl>.
+<html:br/>
+Test passed if result == NaN (constants).
+</template>
+</category>
+
+
+<!-- Test case PERL #04b.
+
+This testcase tests the bot's ability to react on 'divide by zero'.
+
+TESTER) testperlbad2
+BOT)    Test case PERL #04b.
+        The result of 3 / 0 is Infinity.
+        Test passed if result = Infinity (constants).
+-->
+
+<category>
+<pattern>TESTPERLBAD2</pattern>
+<template>
+Test case PERL #04b.
+<html:br/>
+The result of 3 / 0 is <perl>calcDivide ( 3, 0 );</perl>.
+<html:br/>
+Test passed if result = Infinity (constants).
+</template>
+</category>
+
+<!-- Test case PERL #05.
+
+This testcase tests the bot's ability to calculate from free star values.
+It's also a heavy test for the '0 but defined' rule!
+
+TESTER) testperlfree 7 + 4
+BOT)    Test case PERL #05.
+        The stars:
+        1. '7' is a Number.
+        2. '+' is a valid Operator.
+        3. '4' is a Number.
+        Internal: 7 plus 4
+        Result: 7 + 4 = 11
+        Test passed if equation is correct OR
+        Test passed if result == 'Don't know how to do '7 plus 4' OR
+        Test passed if result == NaN (from stars).
+
+TESTER) testperlfree 4 - 6
+BOT)    Test case PERL #05.
+        The stars:
+        1. '4' is a Number.
+        2. '-' is a valid Operator.
+        3. '6' is a Number.
+        Internal: 4 minus 6
+        Result: 4 - 6 = -2
+        Test passed if equation is correct OR
+        Test passed if result == 'Don't know how to do '4 minus 6' OR
+        Test passed if result == NaN (from stars).
+
+TESTER) testperlfree 2 * 9
+BOT)    Test case PERL #05.
+        The stars:
+        1. '2' is a Number.
+        2. '*' is a valid Operator.
+        3. '9' is a Number.
+        Internal: 2 times 9
+        Result: 2 * 9 = 18
+        Test passed if equation is correct OR
+        Test passed if result == 'Don't know how to do '2 times 9' OR
+        Test passed if result == NaN (from stars).
+
+TESTER) testperlfree 6 / 3
+BOT)    Test case PERL #05.
+        The stars:
+        1. '6' is a Number.
+        2. '/' is a valid Operator.
+        3. '3' is a Number.
+        Internal: 6 divide 3
+        Result: 6 / 3 = 2
+        Test passed if equation is correct OR
+        Test passed if result == 'Don't know how to do '6 divide 3' OR
+        Test passed if result == NaN (from stars).
+
+TESTER) testperlfree 2 / 4
+BOT)    Test case PERL #05.
+        The stars:
+        1. '2' is a Number.
+        2. '/' is a valid Operator.
+        3. '4' is a Number.
+        Internal: 2 divide 4
+        Result: 2 / 4 = 0.5
+        Test passed if equation is correct OR
+        Test passed if result == 'Don't know how to do '2 divide 4' OR
+        Test passed if result == NaN (from stars).
+
+TESTER) testperlfree 7 = 7
+BOT)    Test case PERL #05.
+        The stars:
+        1. '7' is a Number.
+        2. '==' is a valid Operator.
+        3. '7' is a Number.
+        Internal: 7 equals 7
+        Result: 7 == 7 = true
+        Test passed if equation is correct OR
+        Test passed if result == 'Don't know how to do '7 equals 7' OR
+        Test passed if result == NaN (from stars).
+
+TESTER) testperlfree 7 = 8
+BOT)    Test case PERL #05.
+        The stars:
+        1. '7' is a Number.
+        2. '==' is a valid Operator.
+        3. '8' is a Number.
+        Result: 7 equals 8 = false
+        Test passed if equation is correct OR
+        Test passed if result == 'Don't know how to do '7 equals 8' OR
+        Test passed if result == NaN (from stars).
+
+TESTER) testperlfree 1 / 0
+BOT)    Test case PERL #05.
+        The stars:
+        1. '1' is a Number.
+        2. '/' is a valid Operator.
+        3. '0' is a Number.
+        Internal: 1 divide 0
+        Result: 1 / 0 = Infinity
+        Test passed if equation is correct OR
+        Test passed if result == 'Don't know how to do '1 divide 0' OR
+        Test passed if result == NaN (from stars).
+
+TESTER) testperlfree 0.9999 / 0.0001
+BOT)    Test case PERL #05.
+        The stars:
+        1. '0.9999' is a Number.
+        2. '/' is a valid Operator.
+        3. '0.0001' is a Number.
+        Internal: 0 point 9999 divide 0 point 0001
+        Result: 0.9999 / 0.0001 = 9999
+        Test passed if equation is correct OR
+        Test passed if result == 'Don't know how to do '1 divide 0' OR
+        Test passed if result == NaN (from stars).
+
+testperlfree 0.0000001 = 0.0000001
+testperlfree 0.0000001 = 0.00000011
+
+
+TESTER) testperlfree 2 power 2
+BOT)    Test case PERL #05.
+        The stars:
+        1. '2' is a Number.
+        2. 'power' is an INVALID Operator.
+        3. '2' is a Number.
+        Internal: 2 power 2
+        Result: 2 power 2 = Don't know how to do '2 power 2'.
+        Test passed if equation is correct OR
+        Test passed if result == 'Don't know how to do '2 power 2' OR
+        Test passed if result == NaN (from stars).
+
+TESTER) testperlfree this is wrong
+BOT)    Test case PERL #05.
+        The stars:
+        1. 'this' is NaN.
+        2. 'is' is an INVALID Operator.
+        3. 'wrong' is NaN.
+        Internal: this is wrong
+        Result: this is wrong = Don't know how to do 'this is wrong'.
+        Test passed if equation is correct OR
+        Test passed if result == 'Don't know how to do 'this is wrong' OR
+        Test passed if result == NaN (from stars).
+-->
+
+<!-- N point N operator N point N -->
+<category>
+<pattern>TESTPERLFREE * * * * * * *</pattern>
+<template>
+Test case PERL #05.
+<html:br/>
+<!--
+stars at TESTPERLFREE (7):
+<html:br/>
+1. <star index="1"/><html:br/>
+2. <star index="2"/><html:br/>
+3. <star index="3"/><html:br/>
+4. <star index="4"/><html:br/>
+5. <star index="5"/><html:br/>
+6. <star index="6"/><html:br/>
+7. <star index="7"/><html:br/>
+-->
+<think>
+	<set name="test1"><perl>isNumber		( toNumber ( '<star index="1"/> <star index="2"/> <star index="3"/>' ) );</perl></set>
+	<set name="test2"><perl>isOperator	( '<star index="4"/>' );</perl></set>
+	<set name="test3"><perl>isNumber		( toNumber ( '<star index="5"/> <star index="6"/> <star index="7"/>' ) );</perl></set>
+</think>
+The stars:
+<html:br/>
+1. '<perl>toNumber ( '<star index="1"/> <star index="2"/> <star index="3"/>' )</perl>' is
+<condition name="test1">
+	<li value="0">NaN.</li>
+	<li value="1">a Number.</li>
+	<li>Test failed.</li>
+</condition>
+<html:br/>
+2. '<perl>toOperator ( '<star index="4"/>' )</perl>' is
+<condition name="test2">
+	<li value="0">an INVALID Operator.</li>
+	<li value="1">a valid Operator.</li>
+	<li>Test failed.</li>
+</condition>
+<html:br/>
+3. '<perl>toNumber ( '<star index="5"/> <star index="6"/> <star index="7"/>' )</perl>' is
+<condition name="test3">
+	<li value="0">NaN.</li>
+	<li value="1">a Number.</li>
+	<li>Test failed.</li>
+</condition>
+<think>
+	<set name="test1"></set>
+	<set name="test2"></set>
+	<set name="test3"></set>
+</think>
+<html:br/>
+Internal: <star/> <star index="2"/> <star index="3"/> <star index="4"/> <star index="5"/> <star index="6"/> <star index="7"/>
+<html:br/>
+Result: <perl>toNumber ( '<star index="1"/> <star index="2"/> <star index="3"/>' )</perl> <perl>toOperator ( '<star index="4"/>' )</perl> <perl>toNumber ( '<star index="5"/> <star index="6"/> <star index="7"/>' )</perl> = <perl>calc ( '<star/> <star index="2"/> <star index="3"/>', '<star index="4"/>', '<star index="5"/> <star index="6"/> <star index="7"/>' );</perl>
+<html:br/>
+Test passed if equation is correct OR
+<html:br/>
+Test passed if result == 'Don't know how to do '<star/> <star index="2"/> <star index="3"/> <star index="4"/> <star index="5"/> <star index="6"/> <star index="7"/>' OR
+<html:br/>
+Test passed if result == NaN (from stars).
+</template>
+</category>
+
+<!-- N operator N point N -->
+<!-- N point N operator N -->
+<category>
+<pattern>TESTPERLFREE * * * * *</pattern>
+<template>
+<!--
+stars at TESTPERLFREE (5):
+<html:br/>
+1. <star index="1"/><html:br/>
+2. <star index="2"/><html:br/>
+3. <star index="3"/><html:br/>
+4. <star index="4"/><html:br/>
+5. <star index="5"/><html:br/>
+-->
+<think>
+<!-- different vars testa vs. test1 (see up) ???? -->
+	<set name="testa"><perl>isOperator	( '<star index="2"/>' );</perl></set>
+	<set name="testb"><perl>isOperator	( '<star index="4"/>' );</perl></set>
+</think>
+<condition name="testa">
+	<li value="1">
+		testA<html:br/>
+		<srai>TESTPERLFREE <star index="1"/> point 0 <star index="2"/> <star index="3"/> <star index="4"/> <star index="5"/></srai>
+	</li>
+	<li>
+		<condition name="testb">
+			<li value="1">
+				testB<html:br/>
+				<srai>TESTPERLFREE <star index="1"/> <star index="2"/> <star index="3"/> <star index="4"/> <star index="5"/> point 0</srai>
+			</li>
+			<li>Test case PERL #05.<html:br/>Test failed.</li>
+		</condition>
+	</li>
+</condition>
+<think>
+	<set name="testa"></set>
+	<set name="testb"></set>
+</think>
+</template>
+</category>
+
+<!-- N operator N -->
+<category>
+<pattern>TESTPERLFREE * * *</pattern>
+<template>
+<!--
+stars at TESTPERLFREE (3):
+<html:br/>
+1. <star index="1"/><html:br/>
+2. <star index="2"/><html:br/>
+3. <star index="3"/><html:br/>
+-->
+<srai>TESTPERLFREE <star index="1"/> point 0 <star index="2"/> <star index="3"/> point 0</srai>
+</template>
+</category>
+
+<!-- Test case 24 star category.
+
+This testcase tests the bot's ability to match a long input.
+Moreover the success response times should grow only moderate.
+(Response times measured with alice/*.aiml + standard/dev-*.aiml on a 700 MHz AMD Duron)
+
+input < 24 words -> ( Response in 4391 msec [ timeout = 5000 ] ):
+
+TESTER) z1 z2 z3 z4 z5 z6 z7 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23
+BOT)    Sorry, I thought a long time about 'z1 z2 z3 z4 z5 z6 z7 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23', but couldn't find an answer.
+
+input = 24 words ( Response in 60 msec ):
+
+TESTER) z1 z2 z3 z4 z5 z6 z7 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24
+BOT)    Test matched 24 star category.
+
+input = 25 words ( Response in 37 msec ):
+
+TESTER) z1 z2 z3 z4 z5 z6 z7 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25
+BOT)    Test matched 24 star category.
+
+And again:
+
+input = 24 words ( Response in 37 msec ):
+
+TESTER) z1 z2 z3 z4 z5 z6 z7 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24
+BOT)    Test matched 24 star category.
+
+input = 25 words ( Response in 37 msec ):
+
+TESTER) z1 z2 z3 z4 z5 z6 z7 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25
+BOT)    Test matched 24 star category.
+
+input = 33 words ( Response in 43 msec ):
+
+TESTER) z1 z2 z3 z4 z5 z6 z7 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33
+BOT)    Test matched 24 star category.
+
+input = 50 words ( Response in 55 msec ):
+
+TESTER) z1 z2 z3 z4 z5 z6 z7 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z35 z36 z37 z38 z39 z40 z41 z42 z43 z44 z45 z46 z47 z48 z49 z50
+BOT)    Test matched 24 star category.
+
+input = 66 words ( Response in 69 msec ):
+
+TESTER) z1 z2 z3 z4 z5 z6 z7 z8 z9 z10 z11 z12 z13 z14 z15 z16 z17 z18 z19 z20 z21 z22 z23 z24 z25 z26 z27 z28 z29 z30 z31 z32 z33 z34 z35 z36 z37 z38 z39 z40 z41 z42 z43 z44 z45 z46 z47 z48 z49 z50 z51 z52 z53 z54 z55 z56 z57 z58 z59 z60 z61 z62 z63 z64 z65 z66
+BOT)    Test matched 24 star category.
+
+-->
+
+<category><pattern>* * * * * * * * * * * * * * * * * * * * * * * *</pattern>
+<template>Test matched 24 star category.</template></category>
+
+<!-- this is never matched if later anywhere else defined and merged - e.g. star.aiml -->
+
+<category><pattern>*</pattern>
+<template>Test matched 1 star category.</template></category>
+
+<!-- must be defined at server.properties.programv.timeout-input -->
+
+<category>
+	<pattern>RESPONSE TIMEOUT</pattern>
+	<template>Sorry, I thought a long time about '<input index="1"/>', but couldn't find an answer.</template>
+</category>
+
+<!-- must be defined at server.properties.programv.infinite-loop-input -->
+
+<category>
+	<pattern>INFINITE LOOP</pattern>
+	<template>Sorry, '<input index="2"/>' pushed me in a doom loop.</template>
+</category>
+
+<!-- must be defined at server.properties.programv.connect-string -->
+<!-- programv-startup.bots.bot.properties.property.id must be defined in startup.xml -->
+
+<category>
+	<pattern>CONNECT</pattern>
+	<template>
+		Hi, pleased to meet you
+		<think>
+			<set name="hasname"><perl>hasValueSet ( 'name', '<get name="name"/>', '<bot name="id"/>' )</perl></set>
+			<set name="hasit"><perl>hasValueSet ( 'it', '<get name="it"/>', '<bot name="id"/>' )</perl></set>
+		</think>
+		<condition name="hasname">
+			<li value="1">
+				again, <get name="name"/>.
+				<condition name="hasit">
+					<li value="1">We were talking about <get name="it"/>.</li>
+					<li><sr/></li>
+				</condition>
+			</li>
+			<li>. My name is <bot name="name"/>. <sr/></li>
+		</condition>
+		<think>
+			<set name="hasname"></set>
+			<set name="hasit"></set>
+		</think>
+	</template>
+</category>
+
+<perl>
+sub hasValueSet
+{
+	my $name		= shift() || '';
+	my $value	= shift() || '';
+	my $bot_id	= shift() || '';
+
+	return 0		unless $name;
+	return 0		unless $value;
+#	return 0		if $value eq AIML::Config::getConfig ( 'emptydefault' );
+
+	my $predicates	= AIML::Knowledge::getPredicates ( $bot_id );
+
+	if ( exists $predicates->{$name} )
+	{
+		my $default		= $predicates->{$name}->{default};
+
+		return 0		if $default and ( $value eq $default );
+	}
+
+	return 1;
+}
+</perl>
+
+<!-- Test case testcaseinfiniteloop
+
+This testcase tests the bot's ability to break a srai doom loop
+
+TESTER) testcaseinfiniteloop
+BOT)    Sorry, 'testcaseinfiniteloop' pushed me in a doom loop.
+
+TESTER) testcaseinfiniteloop2
+BOT)    Sorry, 'testcaseinfiniteloop2' pushed me in a doom loop.
+
+TESTER) testcaseinfiniteloop3
+BOT)    Sorry, 'testcaseinfiniteloop3' pushed me in a doom loop.
+
+-->
+
+<category><pattern>TESTCASEINFINITELOOP</pattern>
+<template><srai>testcaseinfiniteloop</srai></template></category>
+
+<category><pattern>TESTCASEINFINITELOOP2</pattern>
+<template><srai>testcaseinfiniteloop3</srai></template></category>
+
+<category><pattern>TESTCASEINFINITELOOP3</pattern>
+<template><srai>testcaseinfiniteloop2</srai></template></category>
+
+<!-- Test case testcasemultipleadjacentsrais
+
+This testcase tests the bot's ability to - do what?
+
+TESTER) testcasemultipleadjacentsrais
+BOT)    Test not implemented yet.
+-->
+
+<category><pattern>TESTCASEMULTIPLEADJACENTSRAIS</pattern>
+<template>Test not implemented yet.</template></category>
+
+
+</aiml>

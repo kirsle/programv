@@ -1,0 +1,146 @@
+ProgramV version 0.08
+=====================
+
+SETTING UP A SERVER
+-------------------
+
+WARNING: DO NOT USE IN PRODUCTION ENVIRONMENT!
+
+We are only 7 inches above ground zero!
+
+BUT:
+
+The following examples show, how to set up a proxy system so that you
+can restart the mod_perl enabled Apache on it's own without touching
+the production system.
+
+Of course you will have to change the pathes, user names etc. and
+choose your debug switch.
+
+You must have root access!
+
+
+1. Install - if not already done
+--------------------------------
+
+Unpack the tarball to a subdirectory of your choice.
+
+The main structure will be:
+
+/home/ernest/Alice/programv
+/home/ernest/Alice/programv/aiml
+/home/ernest/Alice/programv/conf
+/home/ernest/Alice/programv/data
+/home/ernest/Alice/programv/lib
+
+2. Create a standard Apache home directory
+------------------------------------------
+
+E.g.:
+
+/home/alice
+/home/alice/log
+/home/alice/public_html
+/home/alice/public_html/cgi-bin
+
+3. Edit the main server httpd.conf
+----------------------------------
+
+E.g.:
+
+ProxyRequests	On
+
+<VirtualHost *>
+	ServerName	alice.domain.tld
+	ServerAdmin	webmaster@domain.tld
+	DocumentRoot	/home/alice/public_html
+	CustomLog	/home/alice/log/doc_access_log combined
+	ErrorLog	/home/alice/log/doc_error_log
+	ScriptAlias	/cgi-bin/ /home/alice/public_html/cgi-bin/
+
+	RewriteEngine		on
+	RewriteLogLevel		0
+	RewriteRule		^/talk(.*)$		http://localhost:8042/talk$1		[P,L]
+	NoCache			*
+	ProxyPassReverse	/	http://alice.domain.tld/
+</VirtualHost>
+
+
+4. Create the mod_perl server httpd-alice.conf
+----------------------------------------------
+
+E.g.:
+
+Listen 8042
+
+<VirtualHost localhost:8042>
+	ServerName	alice.domain.tld
+	DocumentRoot	/home/alice/public_html
+
+	CustomLog	/home/alice/log/mod_access_log combined
+	ErrorLog	/home/alice/log/mod_error_log
+
+	<Perl>
+		use strict;
+		use warnings;
+
+		use lib qw ( /home/ernest/Alice/programv/lib );
+
+		$AIML::DEBUG = 0;
+
+		$AIML::Bot::DEBUG	  = 1 && $AIML::DEBUG; #
+		$AIML::Common::DEBUG	  = 1 && $AIML::DEBUG; # 1 = die on warnings
+		$AIML::Config::DEBUG	  = 1 && $AIML::DEBUG; # 1 = switch to readonly hash (slow)
+		$AIML::File::DEBUG	  = 1 && $AIML::DEBUG; #
+		$AIML::Knowledge::DEBUG	  = 1 && $AIML::DEBUG; # 1 = switch to readonly hash (slow)
+		$AIML::Listener::DEBUG	  = 1 && $AIML::DEBUG; #
+		$AIML::Memory::DEBUG	  = 1 && $AIML::DEBUG; #
+		$AIML::Parser::DEBUG	  = 1 && $AIML::DEBUG; # 1 = logs parsing (huge output)
+		$AIML::Graphmaster::DEBUG = 1 && $AIML::DEBUG; # 1 = logs matching tree (huge output)
+		$AIML::Responder::DEBUG	  = 1 && $AIML::DEBUG; #
+		$AIML::Talker::DEBUG	  = 1 && $AIML::DEBUG; #
+		$AIML::Unicode::DEBUG	  = 1 && $AIML::DEBUG; #
+	</Perl>
+
+	PerlSetEnv	AIML_CONFIG_FILE	/home/ernest/Alice/programv/server.properties
+
+	PerlModule	AIML::Handler
+
+	<Location /talk>
+		SetHandler	perl-script
+		PerlHandler	AIML::Handler
+	</Location>
+</VirtualHost>
+</IfDefine>
+
+If you switch on debugging, you'll find the messages in mod_error_log, not in aiml.log!
+
+5. Edit init.d ???apache etc.
+-----------------------------
+
+to ensure automatic startup.
+
+6. GO!
+------
+
+Gentlemen, start your engines please and call
+
+http://alice.domain.tld/talk
+
+in your browser.
+
+
+COPYRIGHT AND LICENSE
+---------------------
+
+Ernest Lergon, ernest@virtualitas.net
+
+Copyright (c) 2002 by Ernest Lergon, VIRTUALITAS Inc.
+
+All Rights Reserved. This module is free software; you can
+redistribute it and/or modify it under the same terms as Perl itself.
+
+If you have suggestions for improvement, please drop me a line. If you
+make improvements to this software, I ask that you please send me a
+copy of your changes. Thanks.
+

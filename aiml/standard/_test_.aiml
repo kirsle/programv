@@ -1,0 +1,98 @@
+
+
+
+
+
+
+
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<aiml version="1.01"
+	xmlns="http://alicebot.org/2001/AIML"
+	xmlns:aiml="http://alicebot.org/2001/AIML"
+	xmlns:html="http://www.w3.org/TR/REC-html40">
+
+<html:meta name="description" content="14 Test patterns for Perl."/>
+<html:meta name="author" content="15 Ernest Lergon"/>
+<html:meta name="copyright" content="16 VIRTUALITAS Inc."/>
+<html:meta name="date" content="17 2002-05-31"/>
+<html:meta name="language" content="18 en"/>
+
+<!--
+	21 Free software © 2002 VIRTUALITAS Inc.
+	22 This program is open source code released under
+	23 the terms of the GNU General Public License
+	24 as published by the Free Software Foundation.
+-->
+
+<!-- 27 ############################# global perl functions ############################### -->
+
+<html:meta name="heinz29" content="HEINZ"/>
+<html:meta name="werner30" content="WERNER"/>
+<!--
+<category>
+	<pattern>Heinz*</pattern>
+	<template></template>
+</category>
+
+<category>
+	<pattern>_Heinz</pattern>
+	<template></template>
+</category>
+
+<category>
+	<pattern>Werner**</pattern>
+	<template></template>
+</category>
+
+
+
+
+<category>
+	<pattern>XXX xx LINE
+52 * * * {Vatikan}</pattern>
+	<template>
+aaa54
+<sr/>
+	bbb56
+			<person/>
+	  ccc58
+</template>
+</category>
+-->
+
+
+
+
+
+
+
+
+<?xml-stylesheet type="text/css" href="70styles.css"?>
+<!-- 71 Data -->
+<?PLZprozessor alertBox("72es sind ungültige Postleitzahlen angegeben")?>
+<!-- 73 Data -->
+
+<category>
+	<pattern>WHAT IS CATEGORY *</pattern>
+	<template>Experience with ALICE has allowed us broadly classify three groups of clients:
+		<html:ul>
+			<html:li>Category A - Abusive Clients</html:li>
+			<html:li>Category B - Average Clients</html:li>
+			<html:li>Category C - Computer experts</html:li>
+		</html:ul>
+Category A clients are the people who say "Fuck you," "You suck", "Suck
+my..." and so on. Abusive...
+	<aiml:exciting-new-1.1-feature/>
+bla bla
+<!-- but not with IE5... -->
+	<aiml:exciting-new-1.1-feature2>
+<xxx>here we can make what we </want/>, everthing is ignored</yyy>
+	</exciting-new-1.1-feature2>
+<!-- -->
+foo bar
+	</template>
+</category>
+
+
+</aiml>

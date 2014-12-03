@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<aiml version="1.01"
+	xmlns="http://alicebot.org/2001/AIML"
+	xmlns:aiml="http://alicebot.org/2001/AIML"
+	xmlns:html="http://www.w3.org/TR/REC-html40">
+
+<!-- This program is open source code released under -->
+<!-- the terms of the GNU General Public License -->
+<!-- as published by the Free Software Foundation. -->
+
+<html:meta name="author" content="Kim Sullivan"/>
+<html:meta name="language" content="en"/>
+
+<topic name="FUNCTION Q4">
+
+<category>
+<pattern>RESPONSE SAYQUESTION</pattern>
+<template>
+Who wrote this AIML example?<html:br/>
+A: Kim Sullivan <html:br/>
+B: Thomas Ringate <html:br/>
+C: Richard Wallace <html:br/>
+<srai>LOOP</srai>
+</template>
+</category>
+
+<category>
+<pattern>RESPONSE A</pattern>
+<template>
+Yes!<html:br/>
+<srai>NEXT QUESTION</srai>
+</template>
+</category>
+
+<category>
+<pattern>RESPONSE B</pattern>
+<template>
+Sorry, the right answer was A.<html:br/>
+<srai>NEXT QUESTION</srai>
+</template>
+</category>
+
+<category>
+<pattern>RESPONSE C</pattern>
+<template>
+No, it was written by Kim.<html:br/>
+<srai>NEXT QUESTION</srai>
+</template>
+</category>
+
+
+<category>
+<pattern>RESPONSE *</pattern>
+<template>
+Please respond only A, B or C. <html:br/>
+<srai>SAYQUESTION</srai>
+</template>
+</category>
+</topic>
+</aiml>
